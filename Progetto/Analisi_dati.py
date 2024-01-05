@@ -12,7 +12,7 @@ from scipy.optimize import curve_fit
 import sys
 
 #Importo modulo con funzioni
-sys.path.append("/Users/mariarita/Metodi_computazionali/gitHub/MCF/Progetto ")
+sys.path.append("")
 import func as f
 
 #Carico file con dati
@@ -37,12 +37,25 @@ par, pcov = curve_fit(f.n_photons_fit, xdata=bincenters[mask], ydata=n[mask], si
 
 y_fit = f.n_photons_fit(bincenters,par[0],par[1])
 
-plt.figure(figsize=(7,6))
-n,bins, p = plt.hist(lam,bins=n_bins, weights=n_photons,color="limegreen", label="Dati") 
-plt.plot(bincenters, y_fit, color="blue", label="Fit")
-plt.title("Istogramma distribuzione fotoni in funzione lunghezza d'onda")
-plt.ylabel("Numero fotoni")
-plt.xlabel("Lunghezza d'onda (nm)")
-plt.legend(frameon=False)
+# Grafico fit e studio quantitativo bontà adattamento
+fig, ax = plt.subplots(2,1, figsize=(9,6), gridspec_kw={'height_ratios': [3, 1]}, sharex=True)
+fig.subplots_adjust(hspace=0)
+ax[0].set_title('Fit istogramma considerando scattering di Rayleigh')
+ax[0].hist(lam,bins=n_bins, weights=n_photons,color="limegreen", label="Dati" )
+ax[0].plot(bincenters, y_fit, color="blue", label="Fit")
+ax[0].set_ylabel('Numero fotoni')
+ax[0].legend(frameon=False)
+scarto=n[mask]-y_fit[mask]
+ax[1].scatter(bincenters[mask],scarto, marker=".",color="darkred")
+ax[1].set_xlabel("Lunghezza d'onda (nm)")
+ax[1].set_ylabel('Scarti')      
 plt.show()
+
+#Chiqudro
+chi2_2 =  np.sum( (scarto)**2 /n[mask] ) 
+#Chi quadro ridotto
+ndof_2 = len(n[mask])-len(par)
+chi2_rid_2=chi2_2/ndof_2
+print("Il chi quadro ridotto è: {:.3f}".format(chi2_rid_2))
+
 print("La temperatura stimata è di {:.1f} +- {:.1f} K" .format(par[1],mt.sqrt(pcov[1][1])))
