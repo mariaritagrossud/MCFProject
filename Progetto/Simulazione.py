@@ -9,6 +9,7 @@ from scipy import integrate
 from scipy import optimize
 import matplotlib.colors
 import sys
+import argparse
 
 #Importo modulo con funzioni
 sys.path.append(" ")
@@ -90,6 +91,7 @@ class star:
         plt.xlabel(r'$ \text{Lunghezza d\'onda (nm)} $')
         plt.legend(frameon=False)
         plt.show()
+
     
     def R_scattering(self, N,estremo_sx, estremo_dx, angle) :
         """
@@ -201,39 +203,121 @@ class star:
 
         return integrali
 
+"""
+Gestione delle azioni con argparse
+"""
+def parse_arguments():
+    
+    parser = argparse.ArgumentParser(description='Gestione delle simulazioni',
+                                     usage      ='--opzione')
+    parser.add_argument('-sole', '--opzione1', action='store_true',  help='Simulazione con Sole')
+    parser.add_argument('-betelgeuse', '--opzione2', action='store_true',  help='Simulazione con Betelgeuse')
+    parser.add_argument('-bellatrix', '--opzione3', action='store_true',  help='Simulazione con Bellatrix')
+    parser.add_argument('-alfacrucis', '--opzione4', action='store_true',  help='Simulazione con Alfa Crucis')
+    parser.add_argument('-tutte', '--opzione5', action='store_true',  help='Simulazione con tutte le Stelle')
+    return  parser.parse_args()
 
 """
 Simulazione eventi per le Stelle in analisi
 ____________________________________________
 
 """
-sole=star("Sole",5.75*10**3)
-betelgeuse=star("Betelgeuse",3*10**3)
-bellatrix=star("Bellatrix",22*10**3)
-alfa_crucis=star("Alfa Crucis",28*10**3)
-stelle=[sole,betelgeuse,bellatrix,alfa_crucis]
-#indago solo nel visibile
-estremo_sx=380 #nm
-estremo_dx=790 #nm
-N=50000
-for item in stelle:
-    print("--------------------------------------------------------------------------------------------")
-    print("Simulazione distribuzione senza assorbimento -  {:} ".format(item.name))
-    sim1=item.no_absorption(N,estremo_sx,estremo_dx)
-    item.no_abs_graph(sim1[0],sim1[1])
-    print("--------------------------------------------------------------------------------------------")
-    print("Simulazione distribuzione con scattering Rayleigh allo zenit -  {:} ".format(item.name))
-    sim2=item.R_scattering(N,estremo_sx,estremo_dx,0)
-    item.R_scattering_graph(sim2[0],0,sim2[1])
-    print("--------------------------------------------------------------------------------------------")
-    print("Simulazione distribuzione con scattering Rayleigh all'orizzonte -  {:} ".format(item.name))
-    sim3=item.R_scattering(N,estremo_sx,estremo_dx,90)
-    item.R_scattering_graph(sim3[0],90,sim3[1])
-    print("--------------------------------------------------------------------------------------------")
-    print("Confronto simulazione diverse distribuzioni -  {:} ".format(item.name))
-    item.compare_distribution(N)
-    print("--------------------------------------------------------------------------------------------")
-    print("Studio andamento flusso integrato al variare angolo  -  {:} ".format(item.name))
+def main():
+
+    sole=star("Sole",5.75*10**3)
+    betelgeuse=star("Betelgeuse",3*10**3)
+    bellatrix=star("Bellatrix",22*10**3)
+    alfa_crucis=star("Alfa Crucis",28*10**3)
+    stelle=[sole,betelgeuse,bellatrix,alfa_crucis]
+
+    #indago solo nel visibile
+    estremo_sx=380 #nm
+    estremo_dx=790 #nm
+    N=50000 
     angle=np.linspace(0,90,200)
-    sim4=item.flusso_integrato(1000,angle)
+    N1=1000
+
+    args = parse_arguments()
+
+    if args.opzione1 == True:
+            #Senza assorbimento
+            sim1=sole.no_absorption(N,estremo_sx,estremo_dx)
+            sole.no_abs_graph(sim1[0],sim1[1])
+            #Scattering Rayleigh Zenit
+            sim2=sole.R_scattering(N,estremo_sx,estremo_dx,0)
+            sole.R_scattering_graph(sim2[0],0,sim2[1])
+            #Scattering Rayleigh orizzonte
+            sim3=sole.R_scattering(N,estremo_sx,estremo_dx,90)
+            sole.R_scattering_graph(sim3[0],90,sim3[1])
+            #Confronto distribuzioni
+            sole.compare_distribution(N)
+            sole.flusso_integrato(N1,angle)
     
+    if args.opzione2 == True:
+            #Senza assorbimento
+            sim1=betelgeuse.no_absorption(N,estremo_sx,estremo_dx)
+            betelgeuse.no_abs_graph(sim1[0],sim1[1])
+            #Scattering Rayleigh Zenit
+            sim2=betelgeuse.R_scattering(N,estremo_sx,estremo_dx,0)
+            betelgeuse.R_scattering_graph(sim2[0],0,sim2[1])
+            #Scattering Rayleigh orizzonte
+            sim3=betelgeuse.R_scattering(N,estremo_sx,estremo_dx,90)
+            betelgeuse.R_scattering_graph(sim3[0],90,sim3[1])
+            #Confronto distribuzioni
+            betelgeuse.compare_distribution(N)
+            betelgeuse.flusso_integrato(N1,angle)
+    
+    if args.opzione3 == True:
+            #Senza assorbimento
+            sim1=bellatrix.no_absorption(N,estremo_sx,estremo_dx)
+            bellatrix.no_abs_graph(sim1[0],sim1[1])
+            #Scattering Rayleigh Zenit
+            sim2=bellatrix.R_scattering(N,estremo_sx,estremo_dx,0)
+            bellatrix.R_scattering_graph(sim2[0],0,sim2[1])
+            #Scattering Rayleigh orizzonte
+            sim3=bellatrix.R_scattering(N,estremo_sx,estremo_dx,90)
+            bellatrix.R_scattering_graph(sim3[0],90,sim3[1])
+            #Confronto distribuzioni
+            bellatrix.compare_distribution(N)
+            bellatrix.flusso_integrato(N1,angle)
+
+    if args.opzione4 == True:
+            #Senza assorbimento
+            sim1=alfa_crucis.no_absorption(N,estremo_sx,estremo_dx)
+            alfa_crucis.no_abs_graph(sim1[0],sim1[1])
+            #Scattering Rayleigh Zenit
+            sim2=alfa_crucis.R_scattering(N,estremo_sx,estremo_dx,0)
+            alfa_crucis.R_scattering_graph(sim2[0],0,sim2[1])
+            #Scattering Rayleigh orizzonte
+            sim3=alfa_crucis.R_scattering(N,estremo_sx,estremo_dx,90)
+            alfa_crucis.R_scattering_graph(sim3[0],90,sim3[1])
+            #Confronto distribuzioni
+            alfa_crucis.compare_distribution(N)
+            alfa_crucis.flusso_integrato(N1,angle)
+
+    if args.opzione5 ==True:
+
+        for item in stelle:
+            print("--------------------------------------------------------------------------------------------")
+            print("Simulazione distribuzione senza assorbimento -  {:} ".format(item.name))
+            sim1=item.no_absorption(N,estremo_sx,estremo_dx)
+            item.no_abs_graph(sim1[0],sim1[1])
+            print("--------------------------------------------------------------------------------------------")
+            print("Simulazione distribuzione con scattering Rayleigh allo zenit -  {:} ".format(item.name))
+            sim2=item.R_scattering(N,estremo_sx,estremo_dx,0)
+            item.R_scattering_graph(sim2[0],0,sim2[1])
+            print("--------------------------------------------------------------------------------------------")
+            print("Simulazione distribuzione con scattering Rayleigh all'orizzonte -  {:} ".format(item.name))
+            sim3=item.R_scattering(N,estremo_sx,estremo_dx,90)
+            item.R_scattering_graph(sim3[0],90,sim3[1])
+            print("--------------------------------------------------------------------------------------------")
+            print("Confronto simulazione diverse distribuzioni -  {:} ".format(item.name))
+            item.compare_distribution(N)
+            print("--------------------------------------------------------------------------------------------")
+            print("Studio andamento flusso integrato al variare angolo  -  {:} ".format(item.name))
+            item.flusso_integrato(N1,angle)
+        
+
+if __name__ == "__main__":
+
+    main()
