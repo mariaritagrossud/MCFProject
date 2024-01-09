@@ -1,6 +1,6 @@
 """
-File con le funzioni usate nel progetto 
-_________________________________________
+File con le funzioni e la classe usate nel progetto 
+___________________________________________________
 """
 
 import numpy as np
@@ -62,9 +62,11 @@ def D_norm(lam,T,k_norm):
     return D(lam,T)*k_norm
 
 def D_norm_opposite(lam,T,k_norm):
+
     """
-    Funzione opposta della densità di fotoni per lunghezza d'onda e unità di superficie e tempo normalizzata
-    usata per trovare il massimo di D_norm
+
+    Funzione opposta della densità di fotoni per lunghezza d'onda e unità di superficie e tempo normalizzata.
+    Usata per trovare il massimo di D_norm
 
     """
     return -D_norm(lam,T,k_norm)
@@ -109,7 +111,7 @@ def n_photons_fit(lam,angle,k,T):
     Funzione uguale a N_obs a meno di un coefficiente moltiplicativo che tenga in conto che la distribuzione non è 
     normalizzata
     N_obs(lam,angle,T) = k * D(lam,T) * p_obs(lam,angle)
-    
+
     """
     lam_fromnano=lam*10**(-9)
     alfa=h*c/(k_b*T)
