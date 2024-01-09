@@ -64,7 +64,7 @@ class star:
 
         plt.figure(figsize=(10,8))
 
-        n_bins = int(mt.sqrt(len(fotoni)))
+        n_bins = 100
         n,bins,p = plt.hist(fotoni,bins=n_bins, color="limegreen", label="Valori simulati")
         
         #Valori attesi

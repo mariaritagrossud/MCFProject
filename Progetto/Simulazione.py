@@ -38,7 +38,7 @@ ____________________________________________
 """
 def main():
 
-    #Creo alcune stelle
+    #Creo le stelle
     sole=starclass.star("Sole",5.75*10**3)
     betelgeuse=starclass.star("Betelgeuse",3*10**3)
     bellatrix=starclass.star("Bellatrix",22*10**3)
