@@ -206,7 +206,7 @@ class star:
 
             #Simulo per angolo i-esimo
             n_obs=self.R_scattering(fotoni,angle[i])
-            n_obs_tot=np.sum(n_obs)
+            n_obs_tot=len(n_obs) 
             integrali.append(n_obs_tot)
 
         plt.figure(figsize=(10,8))
